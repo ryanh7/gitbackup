@@ -32,7 +32,7 @@ type Repository struct {
 
 func getRepositories(
 	client interface{},
-	service string, githubRepoType string, githubNamespaceWhitelist []string,
+	service string, githubOrganization string, githubRepoType string, githubNamespaceWhitelist []string,
 	gitlabProjectVisibility string, gitlabProjectMembershipType string,
 	ignoreFork bool,
 ) ([]*Repository, error) {
@@ -44,6 +44,7 @@ func getRepositories(
 		repositories, err = getGithubRepositories(
 			client,
 			service,
+			githubOrganization,
 			githubRepoType,
 			githubNamespaceWhitelist,
 			gitlabProjectVisibility,

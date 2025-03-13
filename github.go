@@ -10,7 +10,7 @@ import (
 
 func getGithubRepositories(
 	client interface{},
-	service string, githubRepoType string, githubNamespaceWhitelist []string,
+	service string, githubOrganization string, githubRepoType string, githubNamespaceWhitelist []string,
 	gitlabProjectVisibility string, gitlabProjectMembershipType string,
 	ignoreFork bool,
 ) ([]*Repository, error) {
@@ -40,6 +40,35 @@ func getGithubRepositories(
 						cloneURL = *star.Repository.SSHURL
 					}
 					repositories = append(repositories, &Repository{CloneURL: cloneURL, Name: *star.Repository.Name, Namespace: namespace, Private: *star.Repository.Private})
+				}
+			} else {
+				return nil, err
+			}
+			if resp.NextPage == 0 {
+				break
+			}
+			options.ListOptions.Page = resp.NextPage
+		}
+		return repositories, nil
+	}
+
+	if githubOrganization != "" {
+		options := github.RepositoryListByOrgOptions{Type: githubRepoType}
+		for {
+			repos, resp, err := client.(*github.Client).Repositories.ListByOrg(ctx, githubOrganization, &options)
+			if err == nil {
+				for _, repo := range repos {
+					if *repo.Fork && ignoreFork {
+						continue
+					}
+					namespace := strings.Split(*repo.FullName, "/")[0]
+
+					if useHTTPSClone != nil && *useHTTPSClone {
+						cloneURL = *repo.CloneURL
+					} else {
+						cloneURL = *repo.SSHURL
+					}
+					repositories = append(repositories, &Repository{CloneURL: cloneURL, Name: *repo.Name, Namespace: namespace, Private: *repo.Private})
 				}
 			} else {
 				return nil, err

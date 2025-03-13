@@ -23,6 +23,7 @@ func initConfig(args []string) (*appConfig, error) {
 	fs.BoolVar(&c.bare, "bare", false, "Clone bare repositories")
 
 	// GitHub specific flags
+	fs.StringVar(&c.githubOrganization, "github.organization", "", "Organization")
 	fs.StringVar(&c.githubRepoType, "github.repoType", "all", "Repo types to backup (all, owner, member, starred)")
 	fs.StringVar(
 		&githubNamespaceWhitelistString, "github.namespaceWhitelist",

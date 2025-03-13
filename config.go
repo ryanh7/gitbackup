@@ -9,6 +9,7 @@ type appConfig struct {
 	useHTTPSClone bool
 	bare          bool
 
+	githubOrganization                string
 	githubRepoType                    string
 	githubNamespaceWhitelist          []string
 	githubCreateUserMigration         bool

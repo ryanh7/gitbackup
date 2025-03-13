@@ -10,6 +10,7 @@ func handleGithubCreateUserMigration(client interface{}, c *appConfig) {
 	repos, err := getRepositories(
 		client,
 		c.service,
+		c.githubOrganization,
 		c.githubRepoType,
 		c.githubNamespaceWhitelist,
 		c.gitlabProjectVisibility,

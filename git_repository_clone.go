@@ -22,6 +22,7 @@ func handleGitRepositoryClone(client interface{}, c *appConfig) error {
 	repositories, err := getRepositories(
 		client,
 		c.service,
+		c.githubOrganization,
 		c.githubRepoType,
 		c.githubNamespaceWhitelist,
 		c.gitlabProjectVisibility,
